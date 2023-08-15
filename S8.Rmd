@@ -1,0 +1,156 @@
+---
+title: "Session 8 : FactoMineR"
+author: "Moonbin Jo"
+date: ''
+output:
+  html_document:
+    theme: united
+    css: style.css
+    highlight: tango
+mainfont: SourceSansPro
+header-includes:
+- \usepackage[default]{sourcesanspro}
+- \usepackage[T1]{fontenc}
+---
+
+```{r, include = FALSE}
+library(tidyverse)
+library(FactoMineR)
+library(factoextra)
+load("data_final.RData")
+```
+
+
+
+```{r}
+res.mca1 <- MCA(data_final[,2:11])
+```
+
+```{r}
+res.hcpc1 <- HCPC(res.mca1, graph = FALSE)
+res.hcpc1$data.clust$clust %>% summary()
+
+res.hcpc1$desc.var$test.chi2
+res.hcpc1$desc.axes$quanti.var
+res.hcpc1$desc.var$category
+```
+
+
+```{r}
+res.mca2 <- MCA(data_final[,c(2:11, 12:21, 32:35)],
+                quanti.sup = 11:21,
+                quali.sup = 22:24)
+
+
+res.hcpc2 <- HCPC(res.mca2, graph = FALSE)
+```
+
+
+```{r}
+
+fviz_mca_biplot(res.mca2, repel = TRUE,
+                ggtheme = theme_minimal())
+
+fviz_mca_var(res.mca2, choice = "mca.cor",
+             repel = TRUE)
+
+fviz_mca_var(res.mca2, choice = "quanti.sup",
+             ggtheme = theme_minimal())
+
+fviz_mca_biplot(res.mca2,
+             label = "quali.sup",
+             ggtheme = theme_minimal())
+
+
+
+res.hcpc2$data.clust %>% filter(clust == 1) %>%
+  select(11:20) %>% 
+  apply(2, mean) %>% round(1)
+
+res.hcpc2$data.clust %>% filter(clust == 2) %>%
+  select(11:20) %>% 
+  apply(2, mean) %>% round(1)
+
+res.hcpc2$data.clust %>% filter(clust == 3) %>%
+  select(11:20) %>% 
+  apply(2, mean) %>% round(1)
+
+res.hcpc2$data.clust %>% filter(clust == 4) %>%
+  select(11:20) %>% 
+  apply(2, mean) %>% round(1)
+res.hcpc2$data.clust %>% names()
+
+res.hcpc2$data.clust %>% group_by(clust) %>% 
+  summarise(age = mean(age) %>% round(1))
+
+table(res.hcpc2$data.clust$clust, res.hcpc2$data.clust$situation) %>% 
+  prop.table(1) %>% round(2)
+
+table(res.hcpc2$data.clust$clust, res.hcpc2$data.clust$residence) %>% 
+  prop.table(1) %>% round(2)
+
+table(res.hcpc2$data.clust$clust, res.hcpc2$data.clust$occupation) %>% 
+  prop.table(1) %>% round(2)
+
+```
+
+
+```{r}
+res.hcpc2$desc.var$test.chi2
+res.hcpc2$desc.axes$quanti.var
+res.hcpc2$desc.ind$para
+
+res.hcpc2$desc.ind$dist
+
+res.hcpc2$data.clust %>% group_by(clust) %>% 
+  summarise(age = mean(age))
+
+res.hcpc2$data.clust %>% group_by(clust, occupation) %>%
+  summarise(count = n())
+
+res.hcpc2$data.clust %>% ggplot(aes(x = occupation))+
+  geom_bar()+
+  facet_wrap(~clust)
+
+res.hcpc2$data.clust %>% ggplot(aes(x = clust, fill = occupation))+
+  geom_bar(position = "stack")
+
+res.hcpc2$data.clust %>% ggplot(aes(x = residence))+
+  geom_bar()+
+  facet_wrap(~clust)
+
+res.hcpc2$data.clust %>% group_by(clust, residence) %>% 
+  summarise(count = n(), .groups = 'drop')
+
+res.hcpc2$data.clust %>% group_by(clust, situation) %>% 
+  summarise(count = n())
+res.hcpc2$data.clust %>% ggplot(aes(x = situation))+
+  geom_bar()+
+  facet_wrap(~clust)
+
+res.hcpc2$data.clust %>% ggplot(aes(x = clust, fill = situation))+
+  geom_bar(position = "stack")
+
+
+fviz_cluster(res.hcpc2,
+             geom = "point",
+             palette = "Set2",
+             ggtheme = theme_minimal())
+
+
+
+```
+
+
+## Vocabulary of this session
+
+### R commands
+- library
+
+
+### R environment
+- packages
+
+### Statistical terms
+- Counting frequencies
+- Calculating the mean value

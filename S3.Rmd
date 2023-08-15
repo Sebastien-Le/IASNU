@@ -1,0 +1,85 @@
+---
+title: "Session 3 : Comparing two scores using t-test"
+#author: "Moonbin Jo"
+date: ''
+output:
+  html_document:
+    theme: united
+    css: style.css
+    highlight: tango
+mainfont: SourceSansPro
+header-includes:
+- \usepackage[default]{sourcesanspro}
+- \usepackage[T1]{fontenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+# {.tabset .tabset-fade .tabset-pills}
+
+##  Objectives of this session
+
+
+## Exercises 
+
+```{r, include = FALSE}
+library(tidyverse)
+load("data_final.RData")
+```
+
+### t-test
+
+#### t-test between two samples
+
+In the earlier session, we looked at several t-tests that compared the mean value of a score to another score. This t-test was conducted in order to evaluate how constraining the habit was perceived for participants. However, this t-test was able to evaluate the mean value of score for one habit.
+
+What happens when we want to compare the constraint of two habits? Another type of research question we can formulate from this data is whether one habit is more constraining than the other. In other words, we are trying to find out if the type of habit has an effect on the score of constraint. This sort of statistical thinking is called modeling. By modeling, we are trying to find out **what factors influence the output**, and in this situation, we are trying to find out if the factor 'type of habit' significantly influences the 'score of constraint'.
+
+This research question can be answered with a t-test that compares the mean values of two habits. If the type of habit has an effect on the score, than the mean scores would be significantly different. On the other hand, if the type of habit doesn't have an effect on the score, the mean scores would be the same.
+
+We will look at the habits of never flying on an airplane, and unplugging one's electrical devices when you are not using it. First, we will have to modify the data by filtering out the habits that we are trying to compare.
+
+In order to filter out the data for scores for never flying an airplane, and unplugging one's electrical devices, we will use the `filter` function to filter out the habits that we are trying to compare and saving it to another data frame `data_long_score_t`.
+
+```{r data modification}
+data_long_score_t <- data_long_score %>% filter(Habit == "never_airplane_score"|
+                                                Habit == "unplug_score")
+```
+
+Before conducting a t-test between the mean values of the scores, a F-test must be performed in order to compare the variances of the two samples. This F-test is conducted to assess the group differences of populations. These results will be used in the later t-test. The F-test can be conducted using the `var.test` function.
+
+```{r var-test}
+var.test(Score ~ Habit, data_long_score_t)
+```
+
+Though the F-test produces the same p-value, it means a different thing than the p-value of the t-test. For this F-test, the null hypothesis is that the true ratio of variance is equal to 1 (hence, the ratio of the two groups is equal). The p-value shows the probability of the variance for the two groups being equal. As this value is smaller than 0.05, we can accept that the variance of the two groups as being equal. We can also see that the `confidence interval` includes the value of 1. Therefore, the variances of the two scores are the same.
+
+* Now that we've confirmed that the variances are equal, we can add that argument into the t.test function as `var.equal = TRUE`.
+
+```{r}
+t.test(Score ~ Habit, data_long_score_t,
+       var.equal = TRUE)
+```
+
+This time, the t-test is trying to calculate if the difference in means is equal to 0 or not. If the difference was equal to 0, it would mean that the true means of scores were equal. If the difference was not equal to 0, it would mean that the true means of scores were different. This is why the alternative hypothesis seen in the results is `true difference in means between group never_airplane_score and group unplug_score is not equal to 0`. This also means that the null hypothesis is that the true difference in means between group is equal to 0.
+
+Looking at the t-test results, we can see that the the p-value is smaller than 0.05, meaning that the null hypothesis can be rejected. Also looking at the `confidence interval`, the range is larger than 0, Meaning that the mean difference is going to be larger than 0.
+
+Therefore, the perception of constraint of never taking an airplane, and unplugging one's electric device is not equal.
+
+Now that we know that the score is different, we can see which one is more difficult. Looking at the mean values of each habit, we can see that never riding an airplane has a higher score. In conclusion, we can say that never riding an airplane is considered significantly more constraining than unplugging your electrical devices.
+
+## Vocabulary of this session
+
+### R commands
+- library
+
+
+### R environment
+- packages
+
+### Statistical terms
+- Counting frequencies
+- Calculating the mean value

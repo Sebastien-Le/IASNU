@@ -1,0 +1,112 @@
+---
+title: "Session 4 : Investigating the influence of two variables on the score"
+author: "Moonbin Jo"
+date: ''
+output:
+  html_document:
+    theme: united
+    css: style.css
+    highlight: tango
+mainfont: SourceSansPro
+header-includes:
+- \usepackage[default]{sourcesanspro}
+- \usepackage[T1]{fontenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+# {.tabset .tabset-fade .tabset-pills}
+
+##  Objectives of this session
+
+## Exercises
+
+```{r, include = FALSE}
+library(tidyverse)
+load("data_final.RData")
+load("data_final2.RData")
+```
+
+### T-test with two variables
+
+In the earlier sections, we compared the mean value of two samples. This was calculated with the model of `Score ~ Habit` to understand if the type of habit had an effect on the score of constraint. However, as the same participants have given the scores for different types of habits, we can approach the same data with another formula that adds the effect of the participants. By using the model `Score ~ Habit + Judge` we can investigate the effect of participants (judges) on the score of constraint. 
+
+With the `lm` function, we will be able to fit a linear model between the score of constraint and the type of habit, as well as the effect of the judges. These results will be saved as `res1`, and the function `anova` will be used to produce an Analysis of Variance Table. This will help us read the results in order to understand the effect of the variables we are looking at.
+
+```{r}
+res1 <- lm(Score ~ Habit + Judge, data_long_score_t)
+anova(res1)
+```
+
+Just like the the t-test, we also have a p-value. This time it is under the column `Pr(>F)`, the p-value associated with the F statistic.From these results we can see that `Habit` has a significant effect on the score, while the variable of `Judge` does not. 
+
+Take a good look at the p-value of the variable `Habit` (`3.199e-8`). We'll see that number again later.
+
+#### Conducting a paired t-test
+
+The reason why we implemented the effect of the variable `Judge` is because the same participants answered the same questions, and gave two scores. One for the habit of never flying on an airplane, and one for the habit of unplugging one's electric devices. In this kind of situation, we can say that the values are **paired**. These sort of paired values can also be examined using a **paired** t-test.
+
+In this case the data has to be paired by Judge so it has a different structure than the data that we analyzed. Instead of a column for `Habit` and one for `Score`, we have one for each type of habit. These are paired so that each row indicates the pair of scores that the participants have given.
+
+```{r}
+data_paired <- data_final[,c("never_airplane_score", "unplug_score")]
+data_paired %>% head()
+```
+
+If the constraint scores were the same for habits, the difference between scores would be 0. The paired t-test will see if the mean of difference in scores for participants is 0 or not.
+
+```{r}
+t.test(data_paired$never_airplane_score,
+       data_paired$unplug_score,
+       paired = TRUE)
+```
+
+Looking at the results we can see that the mean difference is not equal to 0, indicating that the constraint scores between habits are significantly different.
+
+Look at the p-value. Have we seen this value before? (Yes.)
+
+The p-value of the paired t-test is the same as the analysis of variance table for the linear model, with the formula of `Score ~ Habit + Judge`. This is because the paired t-test (unlike the t-test we did in Session 3) also includes the variable `Judge`.
+
+The t-test we performed that was **not paired** was comparing the differences in the mean values of scores. On the other hand, the t-test that we performed that **was paired** is comparing the mean value of the differences in scores. 
+You can see the differences in the wording of the results. For the t-test that was not paired, you can see that the alternative hypothesis is `true difference in means between group never_airplane_score and group unplug_score is not equal to 0`. On the other hand, for the paired t-test the alternative hypothesis is `true mean difference is not equal to 0`, because the paired t-test sees if the mean for difference in scores is equal to 0.
+
+We can see the same results of the paired t-test, by conducting a t-test on the differences of score for the habit of never flying on an airplane, and unplugging your electric devices.
+
+First we calculate the differences in scores and save them in another variable `difference`. We will then conduct a t-test on whether the mean of this difference is equal to 0 or not.
+
+```{r}
+data_paired$difference <- data_paired$never_airplane_score - data_paired$unplug_score
+t.test(data_paired$difference)
+```
+
+The results show the same `t` value and `p-value` as the paired t-test, showing us once again that the paired t-test is calculating whether the mean of difference is equal to 0 or not.
+
+[**Now it's your turn!**]{style="color:red"}
+
+Run the next line of the script.
+
+**`t.test(data_final$never_airplane_score, data_final$local_products_score,`** **`paired = TRUE)`**
+
+```{r t-test practice, include = FALSE}
+t.test(data_final$never_airplane_score, data_final$local_products_score,
+       paired = TRUE)
+```
+
+-   What is the research question that we are trying to answer?
+-   What do the p-value results indicate? What is different from the results of the earlier t-test between never riding an airplane and unplugging your electric devices?
+-   Is the amount of constriction the participants feel for never taking an airplane and only buying locally sourced food products the same, or different?
+
+## Vocabulary of this session
+
+### R commands
+- library
+
+
+### R environment
+- packages
+
+### Statistical terms
+- Counting frequencies
+- Calculating the mean value

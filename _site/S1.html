@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Session 1: Presentation of the Atomic Habits case study</title>
+
+<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-6.4.0/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.0/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">L'Institut Agro Rennes Angers & Seoul National University: a bottom-up approach to statistical analysis</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/AgrocampusDS/demarche_statistique">
+    <span class="fa fa-github"></span>
+     
+    
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Session 1: Presentation of the Atomic
+Habits case study</h1>
+
+</div>
+
+
+<div id="section"
+class="section level1 tabset tabset-fade tabset-pills">
+<h1 class="tabset tabset-fade tabset-pills"></h1>
+<div id="objectives-of-this-session" class="section level2">
+<h2>Objectives of this session</h2>
+<ul>
+<li>Understanding the data set of perception</li>
+<li>Analysis and visualization of data
+<ul>
+<li>Yes/No answer data</li>
+<li>Score data</li>
+</ul></li>
+</ul>
+</div>
+<div id="exercises" class="section level2">
+<h2>Exercises</h2>
+<div id="the-atomic-habits-case-study" class="section level3">
+<h3>The Atomic Habits case study</h3>
+<p>‘Atomic Habits’ refers to a book written by James Clear, published in
+2018. The full title of the book is <em>Atomic Habits: An Easy &amp;
+Proven Way to Build Good Habits &amp; Break Bad Ones</em>. The book
+focuses on the idea that making small, incremental changes to our habits
+can lead to significant improvements in our lives over time.</p>
+<p>The term ‘atomic’ in this context refers to the concept of breaking
+habits down into their smallest, indivisible components. Just as atoms
+are the fundamental building blocks of matter, small habits are the
+fundamental building blocks of personal development and behavior change.
+The book draws from scientific research, psychology, and real-life
+examples to explain how habits work and how individuals can harness the
+power of habits to transform their lives.</p>
+<p>In our study, participants were given a list of ten habits to
+implement in their daily lives. By understanding the difficulties and
+constraints of implementation, how habits are perceived and why they are
+perceived as they are, we can suggest ways to change behaviour.</p>
+<p>The questionnaire regarding the perception of the ten habits was
+composed of three sections.</p>
+<p>The first section of the questionnaire was about the possibility of
+implementing the habit. If the participant thought the habit could be
+done in the near future, or if they had already started doing it, they
+would answer ‘Yes’. If they did not think it was possible to do the
+habit in the near future, they would answer ‘No’.</p>
+<p>In the second section of the questionnaire, participants were asked
+to indicate the degree of constraint they would experience in performing
+the habit. This was answered on a scale from 0 to 5.</p>
+<p>The third section asked for the reasons for their answers and would
+give us a more thorough explanation of their answers, giving us more
+insight into the perceived difficulty of these habits.</p>
+<p>In this session we will look at the analysis and visualisation of the
+first and second sections of the questionnaire. We will try to deepen
+our understanding of the implementation and limitation of the ten
+habits.</p>
+</div>
+<div id="data-analysis-and-visualisation" class="section level3">
+<h3>Data analysis and visualisation</h3>
+<div id="do-you-feel-capable-of" class="section level4">
+<h4>Do you feel capable of…?</h4>
+<div id="some-numerical-indicators" class="section level5">
+<h5>Some numerical indicators</h5>
+<p>As mentioned, ten atomic habits were evaluated:</p>
+<ul>
+<li>never drive alone (<em>car_alone</em>)</li>
+<li>never take the plane (<em>never_airplane</em>)</li>
+<li>use equipment loan systems rather than buying (<em>loaner</em>)</li>
+<li>buy only second hand clothes (<em>clothes_second</em>)</li>
+<li>buy only bulk products (<em>bulk</em>)</li>
+<li>buy only local products (<em>local_products</em>)</li>
+<li>switch off plugged-in appliances instead of leaving them on standby
+(<em>unplug</em>)</li>
+<li>lower the temperature in your home by 1 degree
+(<em>low_temperature</em>)</li>
+<li>adopt a strictly plant-based diet (<em>vegetarian</em>)</li>
+<li>air-dry your washing (<em>air_drying</em>)</li>
+</ul>
+<p>The first question was: <em>do you feel capable of…?</em>. The first
+part of the data consists of yes or no answers. In other words, it is
+binary data. What can we do with this data? Firstly, we can understand
+the difficulty of implementation by looking at the frequency of yes or
+no answers.</p>
+<pre><code>##  car_alone never_airplane loaner    clothes_second  bulk     local_products
+##  Yes:79    Yes:81         Yes:151   Yes:95         Yes:118   Yes:89        
+##  No :88    No :86         No : 16   No :72         No : 49   No :78        
+##  unplug    low_temperature vegetarian air_drying
+##  Yes:144   Yes:145         Yes: 39    Yes:154   
+##  No : 23   No : 22         No :128    No : 13</code></pre>
+<p>Looking at these results, we can see that the proportions of yes and
+no answers are different from one habit to the other. If the proportion
+of ‘no’ answers is higher, more people find this habit more difficult to
+implement. Therefore, if we organise the order of these habits according
+to the proportion of ‘no’ answers, we can see which habits are harder to
+implement than others.</p>
+<pre><code>##                 Yes  No
+## vegetarian       39 128
+## car_alone        79  88
+## never_airplane   81  86
+## local_products   89  78
+## clothes_second   95  72
+## bulk            118  49
+## unplug          144  23
+## low_temperature 145  22
+## loaner          151  16
+## air_drying      154  13</code></pre>
+<p>If we rearrange the habits according to the frequency of responses,
+we can see that becoming a vegetarian and never using a car when alone
+are the hardest habits to implement. We can also see that air-drying
+laundry and using a loan system for items are easier to implement.</p>
+</div>
+<div id="some-graphical-representations" class="section level5">
+<h5>Some graphical representations</h5>
+<p>R comes with a number of functions that you can use by default, but
+you can use a wider range of functions by using packages. R packages are
+collections of R functions, code, and data that are easy to install and
+use. When you first open R, the R console has only the default packages.
+But by installing and loading other packages using respectively the
+<code>install.packages()</code> and <code>library()</code> functions, we
+have access to more functions. Let’s represent our data with the
+<code>ggplot2</code> package.</p>
+<p>The data we have compiled is the frequency of responses for each
+habit. This type of data can be visualised using bar charts. Bar chart
+and bar plot are terms often used interchangeably, and they both refer
+to graphical representations of categorical data using rectangular bars.
+Let’s start by visualising the habit that was considered the easiest to
+implement.</p>
+<p><img src="S1_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Through this bar plot we can see that the frequency of the answer
+‘Yes’ is much higher than ‘No’, meaning that the habit of air drying
+your laundry is found implementable for a lot of people. Now let’s look
+at the habit that was considered most difficult to implement.</p>
+<p><img src="S1_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Unlike the previous habit, the habit of becoming vegetarian had a
+higher frequency of the answer ‘No’. This shows that the implementation
+of this habit is difficult to implement.</p>
+<p>In order to effectively compare the proportions of these two habits,
+we can standardize the y axis and put these graphs side by side.</p>
+<p><img src="S1_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>From this comparison we can see that the difference in proportions is
+more extreme for the habit of air-drying than for becoming
+vegetarian.</p>
+</div>
+<div id="remarks" class="section level5">
+<h5>Remarks</h5>
+<ul>
+<li>If you want additional information about what categorical variables
+are, please visit
+<a href="https://www150.statcan.gc.ca/n1/edu/power-pouvoir/ch8/5214817-eng.htm" target="_blank">this
+website</a>.</li>
+<li>Habits could be easily replaced by some other stimuli such as
+products in sensory science.</li>
+</ul>
+</div>
+</div>
+<div id="i-find-this-habit" class="section level4">
+<h4>I find this habit…</h4>
+<div id="some-numerical-indicators-1" class="section level5">
+<h5>Some numerical indicators</h5>
+<p>The second part of the data concerns the restrictiveness score for
+the ten habits: <em>I find this habit: 0, not restrictive - 5, very
+restrictive</em>. With this data we can understand the quantitative
+level of constraint perceived by the participants for the ten habits. A
+rudimentary analysis can be done by calculating the mean of the scores
+for each habit. Let’s look at this first.</p>
+<pre><code>##       car_alone_score  never_airplane_score          loaner_score 
+##                   3.1                   2.7                   1.7 
+##  clothes_second_score            bulk_score  local_products_score 
+##                   2.3                   2.4                   2.7 
+##          unplug_score low_temperature_score      vegetarian_score 
+##                   1.6                   1.5                   3.6 
+##      air_drying_score 
+##                   1.1</code></pre>
+<p>Looking at the mean values of the scores, we can see that the habits
+have different mean values, which shows that the amount of constraint
+the participants perceive the habit to be is different. Just as with the
+previous binary data, we can rearrange the results to understand them
+better.</p>
+<pre><code>##      vegetarian_score       car_alone_score  never_airplane_score 
+##                   3.6                   3.1                   2.7 
+##  local_products_score            bulk_score  clothes_second_score 
+##                   2.7                   2.4                   2.3 
+##          loaner_score          unplug_score low_temperature_score 
+##                   1.7                   1.6                   1.5 
+##      air_drying_score 
+##                   1.1</code></pre>
+<p>By rearranging habits by mean values we can see which habits are more
+constraining than others. We can also see that out of the habits,
+becoming vegetarian is the most constraining, while air drying is the
+least constraining.</p>
+</div>
+<div id="some-graphical-representations-1" class="section level5">
+<h5>Some graphical representations</h5>
+<p>The mean of the scores gives a good summary of the level of
+restriction, but it does not fully explain the data we have. Even if two
+habits have similar mean scores, this does not mean that the
+distribution of perceptions is the same. Some habits may have a fairly
+even distribution of scores, while some others may have a skewed
+distribution. The distribution of scores is visualised using a
+histogram. A histogram is a graphical representation of the distribution
+of a dataset. It is used to display the underlying frequency
+distribution of a set of continuous or discrete data.</p>
+<p><img src="S1_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>Now that we can see the distributions of the scores, we can have a
+deeper understanding of the scores. For example, the habit of using only
+local products (<em>local_products_score</em>) and never taking a plane
+(<em>never_airplane_score</em>) have the same mean of 2.7, but they have
+a different distribution.</p>
+<p>For the habit of using local products, the score responses were more
+heavily distributed between 2 and 4, indicating that the majority of
+participants perceived this habit to be similarly constraining. However,
+for the habit of never flying, the distribution was more even,
+suggesting that for some participants this habit was not perceived as
+constraining at all, while for others it was very constraining.</p>
+<p>In this session we have analysed categorical and continuous data and
+also presented this analysis in a more effective way by visualising the
+data. In the next session we will look more closely at the score data to
+deepen our understanding.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="vocabulary-of-this-session" class="section level2">
+<h2>Vocabulary of this session</h2>
+<div id="r-commands" class="section level3">
+<h3>R commands</h3>
+<ul>
+<li>library</li>
+<li>geom_bar</li>
+<li>geom_histogram</li>
+</ul>
+</div>
+<div id="r-environment" class="section level3">
+<h3>R environment</h3>
+<ul>
+<li>packages</li>
+</ul>
+</div>
+<div id="statistical-terms" class="section level3">
+<h3>Statistical terms</h3>
+<ul>
+<li>Counting frequencies</li>
+<li>Calculating the mean value</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

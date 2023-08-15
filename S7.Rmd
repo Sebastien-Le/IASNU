@@ -1,0 +1,216 @@
+---
+title: "Session 7 : FactoMineR"
+author: "Moonbin Jo"
+date: ''
+output:
+  html_document:
+    theme: united
+    css: style.css
+    highlight: tango
+mainfont: SourceSansPro
+header-includes:
+- \usepackage[default]{sourcesanspro}
+- \usepackage[T1]{fontenc}
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+load("data_final.RData")
+```
+
+
+#### Understanding the properties of the participants (PCA)
+
+In the earlier sessions, we focused on the habits of the study. We found out which habits were more difficult to implement and which habits had higher scores of constraint.
+
+Now that we have understood the general perception of the ten habits, we will now focus on another important part of the study. **The participants.** For this session, we will focus on the participants of the study by looking at the score of constraint data.
+
+Let's look at the first participant
+
+```{r}
+data_final[1,12:21]
+```
+
+Through these results we can see that this participant perceives the habits of never flying on an airplane and becoming vegetarian as very constraining (score range of 4-5), but also thinks that the other habits are not as constraining (score range of 0-2).
+
+In this way we can see what habits this participant thinks as constraining and what are not. However, we have 167 participants to look at, and ten different habits to analyze. If we try to understand the participants by looking at them like this one by one, this will take a long time and we won't be able to see the general distribution of the data from the participants. Therefore, we need a faster way to analyze the data and one that will also give a general understanding of the participants.
+
+This will be done using a Principal component analysis (PCA). A PCA is tool that you can use to simplify the data that you have. For the score of constraint, we have ten different habits, meaning that we have ten different variables that will explain the participants. If we plot out the data using all ten of the habits, we will have to plot ten different dimensions. This is impossible to visualize and also impossible for us to understand. Therefore, a PCA is used to reduce the dimensions. This is done by identifying new principal components that explain the data the most. By constructing these principal components, we can reduce the amount of dimensions the data has and visualize it with less dimensions.
+
+In short, by constructing new axes that explain more of the variance of the data than just one variable, we are able to understand the data with less dimensions.
+
+This is a very rudimentary explanation on the PCA, so if you are interested in learning more please check out this page [here](https://builtin.com/data-science/step-step-explanation-principal-component-analysis).
+
+Through a PCA we will be able to see...
+
+* The tendency of the participants
+* The overall tendency of scores
+* and much more!
+
+First we need to load the packages that are needed for the PCA. `FactoMineR` will be used to conduct the PCA, and the `factoextra` package will be used for visualization
+
+```{r, message = FALSE}
+library(FactoMineR)
+library(factoextra)
+```
+
+Now we will conduct the PCA.
+
+```{r}
+res.pca1 <- PCA(data_final[,12:21])
+```
+
+The PCA has given us two graphs, the `PCA graph of individuals`, and the `PCA graph of variables`. The first graph is the projection of the 167 participants. If two participants are close to one another in this graph, this indicates that two are similar in terms of scores of constraint, and if they are far away from each other, this indicates that they are different.
+
+```{r}
+data_final$colors <- NA
+data_final$colors[c(27, 54, 66)] <- "Red"
+data_final$labels <- NA
+data_final$labels[c(27, 54, 66)] <- c(27, 54, 66)
+fviz_pca_ind(res.pca1,
+             geom = "point",
+             geom.ind = "point")+
+  geom_point(aes(color = data_final$colors))+
+  geom_text(aes(label = data_final$labels), nudge_y = 0.2)
+```
+
+For example, if you see participant 27 and 54, they are very close to each other. However, for participant 66, they are quite far away from each other. This indicates that participant 27 and 54 have similar response patterns, while participant 66 has a very different response pattern. Let's see if this is true.
+
+```{r}
+data_final[c(27, 54),12:21]
+```
+
+The participants 27 and 54 show a similar trend in responses. 
+They have answered that habits such as not taking one's car when they are alone, never taking an airplane and becoming vegetarian are very constraining, but habits such as air drying your laundry, using a loaner system for products, and unplugging one's electrical devices when not using them are not.
+
+Now let's look at participants 27 and 66.
+
+```{r}
+data_final[c(27, 66),12:21]
+```
+
+We can see that there is a difference in responses between these two participants. For example, habits such as never flying on an airplane and becoming vegetarian were considered very constraining for participant 27, but are considered not constraining for participant 66. On the contrary, for the habit of air drying laundry, participant answered that this habit was not constraining, but it was very constraining for participant 66.
+
+Now that we've seen what the first graph does, let's see the second graph.
+
+```{r}
+fviz_pca_var(res.pca1)
+```
+
+In the PCA graph of variables, you can see the arrows that represent the ten variables (ten habits). While the graph of individuals represented the participants with their projections, the graph of variables represent the variables by their correlations. If the arrows of two variables are headed toward the same direction, this means that they are positively correlated. If the arrows of two variables are directed toward the opposite direction, they are negatively correlated.
+
+Not only can we see the association between variables, but we can also see the association of variables with the principal components that were calculated (the dimensions that were calculated with the PCA). The distance between the end of the arrow of the variable and the origin of the plot, shows how well the variable is represented on the dimensions that are visualized. If they are far away from the origin in this plot, that means they are well represented in the first and second dimension. If they are close to the origin in this plot, that means that they are probably represented in the other dimensions that are not visualized here (dimensions 3, 4, and so on).
+
+Looking at this plot, we can see that the arrows of the variables are headed toward the positive side of Dim 1. 
+
+```{r}
+fviz_pca_biplot(res.pca1)
+```
+
+Let's first look at the dimensions of the plot. Dim 1 is the first principal component that explains 23.03% of the total variance. Dim 2 is the second principal component that is orthogonal to Dim 1, and explains 13.53% of the total variance. In total, these two dimensions explain 36% of the total variance.
+
+
+
+```{r}
+scale_data <- data_final[,12:21] %>% apply(1, scale)
+scale_data <- scale_data %>% t() %>% as.data.frame()
+names(scale_data) <- names(data_final[,12:21])
+res.pca3 <- PCA(scale_data)
+```
+
+```{r}
+res.pca2 <- PCA(data_final[,12:21],
+                axes = c(2,3))
+```
+
+```{r}
+res.pca4 <- PCA(data_final[,c(12:21, 2:11, 32:35)],
+                quanti.sup = 21,
+                quali.sup = c(11:20,22:24))
+
+
+
+res.pca4$quanti.sup
+
+res.pca4$quanti.sup$cos2
+
+res.pca4$quali.sup$eta2
+res.pca4$quanti.sup
+
+fviz_pca_var(res.pca4)
+
+res.pca4$quali.sup
+
+fviz_pca_biplot(res.pca4,
+                axes = c(2,3))
+
+fviz_pca_biplot(res.pca4,
+                axes= c(2,3),
+                invisible = "ind")
+
+res.pca4$quali.sup
+
+fviz_pca_ind(res.pca4,
+             addEllipses = TRUE, ellipse.type = "confidence",
+             habillage = 22,
+             palette = "Set2",
+             axes = c(2,3))
+
+fviz_pca_ind(res.pca4,
+             addEllipses = TRUE, ellipse.type = "confidence",
+             habillage = 23,
+             palette = "Set2",
+             axes = c(2,3))
+
+fviz_pca_ind(res.pca4,
+             addEllipses = TRUE, ellipse.type = "confidence",
+             habillage = 24,
+             palette = "Set2",
+             axes = c(2,3))
+
+fviz_pca_ind(res.pca4,
+             addEllipses = TRUE, ellipse.type = "confidence",
+             habillage = 24,
+             palette = "Set2",
+             axes = c(1,2))
+
+```
+
+
+```{r}
+res.hcpc1 <- HCPC(res.pca4, graph = FALSE)
+res.hcpc1$data.clust$clust %>% summary()
+
+res.hcpc1$desc.var$test.chi2
+res.hcpc1$desc.axes$quanti.var
+res.hcpc1$desc.var$category
+
+res.hcpc1$desc.var$quanti.var
+
+res.hcpc1$desc.var$quanti
+
+res.hcpc1$data.clust %>% summary()
+res.hcpc1$data.clust %>% group_by(clust) %>% 
+  summarise(mean = mean(age) %>% round(1))
+
+
+
+```
+
+
+## Vocabulary of this session
+
+### R commands
+- library
+
+### R environment
+- packages
+
+### Statistical terms
+- Counting frequencies
+- Calculating the mean value

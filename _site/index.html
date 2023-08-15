@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>An R training course for understanding perception data</title>
+
+<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.0/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.0/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">L'Institut Agro Rennes Angers & Seoul National University: a bottom-up approach to statistical analysis</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/AgrocampusDS/demarche_statistique">
+    <span class="fa fa-github"></span>
+     
+    
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">An R training course for understanding
+perception data</h1>
+
+</div>
+
+
+<p>By defintion, perception is the process by which individuals
+interpret and make sense of sensory information from their environment.
+It involves the brain’s ability to organize and understand sensory
+input, such as visual, auditory, tactile, olfactory, and gustatory
+sensations.</p>
+<p>A <em>bottom-up approach to statistical analysis</em> refers to a
+method or strategy in which data analysis is initiated by examining
+individual data points before drawing broader conclusions or patterns.
+In this approach, you start with the raw data and build up to
+understanding larger trends or insights.</p>
+<p>In other words, instead of beginning with a preconceived hypothesis
+or theory, you start with the actual data and gradually analyze and
+synthesize the information to uncover patterns, relationships, and
+trends that might not have been apparent at first glance.</p>
+<p>In the context of statistics, a bottom-up approach emphasizes data
+exploration, visualization, and understanding before formulating
+hypotheses or making generalizations. It is a way to let the data guide
+the analysis process, rather than imposing preconceived ideas onto the
+data.</p>
+<p>The objectives of this series of exercises are manifold. They aim to
+assist students, scientists, and researchers interested in perception
+data in making the most of such data, analyzing them using R and
+developing a statistical mindset. Making the most of perception data
+entails understanding how to formulate research questions and
+determining what insights to glean from the data.</p>
+<p>This course in its current form was made possible by the work of
+MoonBin Jo of SNU, under the supervision of JaeHee Hong and Sébastien
+Lê, and is also the result of several years of teaching and exchange
+with colleagues. A big thank you to Marie Pierre Etienne for designing
+the website. A huge thank you also to the students at the Institut Agro
+Rennes Angers who collected the data: Achille Gausserès, Alexia Gueguen,
+Solène Gueguen, Eric Kapisiz, Laureline Lespinasse, Claire Pelletier,
+Roméo Renier.</p>
+<div id="section"
+class="section level1 tabset tabset-fade tabset-pills">
+<h1 class="tabset tabset-fade tabset-pills"></h1>
+<div id="sessions" class="section level2">
+<h2>Sessions</h2>
+<table class=" lightable-classic" style="font-family: Helvetica; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Sessions
+</th>
+<th style="text-align:left;">
+Link
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Session 1: Presentation of the Atomic Habits case study
+</td>
+<td style="text-align:left;">
+<a href="S1.html" style="     ">S1</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Session 2 : Understanding the scores of one habit using the t-test
+</td>
+<td style="text-align:left;">
+<a href="S2.html" style="     ">S2</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Session 3 : Comparing two scores using t-test
+</td>
+<td style="text-align:left;">
+<a href="S3.html" style="     ">S3</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Session 4 : Investigating the influence of two variables on the score
+</td>
+<td style="text-align:left;">
+<a href="S4.html" style="     ">S4</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Session 5 : Comparing models
+</td>
+<td style="text-align:left;">
+<a href="S5.html" style="     ">S5</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Session 6 : Comparing three or more scores using ANOVA test
+</td>
+<td style="text-align:left;">
+<a href="S6.html" style="     ">S6</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Session 7 : FactoMineR
+</td>
+<td style="text-align:left;">
+<a href="S7.html" style="     ">S7</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Session 8 : FactoMineR
+</td>
+<td style="text-align:left;">
+<a href="S8.html" style="     ">S8</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="scripts-and-data" class="section level2">
+<h2>Scripts and data</h2>
+<div id="scripts" class="section level3">
+<h3>Scripts</h3>
+<ul>
+<li><a href="S1_script.R">S1_script.R</a> : The R script for Session
+1.</li>
+<li><a href="S2_script.R">S2_script.R</a> : The R script for Session
+2.</li>
+<li><a href="S3_script.R">S3_script.R</a> : The R script for Session
+3.</li>
+<li><a href="S4_script.R">S4_script.R</a> : The R script for Session
+4.</li>
+<li><a href="S5_script.R">S5_script.R</a> : The R script for Session
+5.</li>
+<li><a href="S6_script.R">S6_script.R</a> : The R script for Session
+6.</li>
+</ul>
+</div>
+<div id="data" class="section level3">
+<h3>Data</h3>
+<ul>
+<li><a href="data_final.csv">Perception data - participant based</a>
+perception data for environmental habits.</li>
+<li><a href="data_long_score.csv">Perception data - constraint score
+based</a> perception data for environmental habits, but modified for the
+scores of the habits to be the rows of the data, not the
+participants.</li>
+<li><a href="data_long_score_t.csv">Perception data - constraint score
+based and modified</a> long data that is modified specifically for
+Sessions 3, 4, and 5. For more information about how this modification
+was done, see Session 3.</li>
+</ul>
+</div>
+</div>
+<div id="index-vocabulary" class="section level2">
+<h2>Index vocabulary</h2>
+<div id="statistical-terms" class="section level3">
+<h3>Statistical terms</h3>
+<table class=" lightable-classic" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Vocabulary
+</th>
+<th style="text-align:left;">
+Session
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Calculating the mean value
+</td>
+<td style="text-align:left;">
+<a href="S6.html" style="     ">S6</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Counting frequencies
+</td>
+<td style="text-align:left;">
+<a href="S6.html" style="     ">S6</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Calculating the mean value
+</td>
+<td style="text-align:left;">
+<a href="S1.html" style="     ">S1</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Calculating the mean value
+</td>
+<td style="text-align:left;">
+<a href="S3.html" style="     ">S3</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Calculating the mean value
+</td>
+<td style="text-align:left;">
+<a href="S4.html" style="     ">S4</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Calculating the mean value
+</td>
+<td style="text-align:left;">
+<a href="S5.html" style="     ">S5</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Calculating the mean value
+</td>
+<td style="text-align:left;">
+<a href="S7.html" style="     ">S7</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Calculating the mean value
+</td>
+<td style="text-align:left;">
+<a href="S8.html" style="     ">S8</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Counting frequencies
+</td>
+<td style="text-align:left;">
+<a href="S1.html" style="     ">S1</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Counting frequencies
+</td>
+<td style="text-align:left;">
+<a href="S3.html" style="     ">S3</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Counting frequencies
+</td>
+<td style="text-align:left;">
+<a href="S4.html" style="     ">S4</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Counting frequencies
+</td>
+<td style="text-align:left;">
+<a href="S5.html" style="     ">S5</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Counting frequencies
+</td>
+<td style="text-align:left;">
+<a href="S7.html" style="     ">S7</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Counting frequencies
+</td>
+<td style="text-align:left;">
+<a href="S8.html" style="     ">S8</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="r-environment" class="section level3">
+<h3>R environment</h3>
+<table class=" lightable-classic" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Vocabulary
+</th>
+<th style="text-align:left;">
+Session
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+packages
+</td>
+<td style="text-align:left;">
+<a href="S6.html" style="     ">S6</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+packages
+</td>
+<td style="text-align:left;">
+<a href="S1.html" style="     ">S1</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+packages
+</td>
+<td style="text-align:left;">
+<a href="S2.html" style="     ">S2</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+packages
+</td>
+<td style="text-align:left;">
+<a href="S3.html" style="     ">S3</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+packages
+</td>
+<td style="text-align:left;">
+<a href="S4.html" style="     ">S4</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+packages
+</td>
+<td style="text-align:left;">
+<a href="S5.html" style="     ">S5</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+packages
+</td>
+<td style="text-align:left;">
+<a href="S7.html" style="     ">S7</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+packages
+</td>
+<td style="text-align:left;">
+<a href="S8.html" style="     ">S8</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="r-commands" class="section level3">
+<h3>R commands</h3>
+<table class=" lightable-classic" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Vocabulary
+</th>
+<th style="text-align:left;">
+Session
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+library
+</td>
+<td style="text-align:left;">
+<a href="S6.html" style="     ">S6</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+geom_bar
+</td>
+<td style="text-align:left;">
+<a href="S1.html" style="     ">S1</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+geom_histogram
+</td>
+<td style="text-align:left;">
+<a href="S1.html" style="     ">S1</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+library
+</td>
+<td style="text-align:left;">
+<a href="S1.html" style="     ">S1</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+library
+</td>
+<td style="text-align:left;">
+<a href="S2.html" style="     ">S2</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+library
+</td>
+<td style="text-align:left;">
+<a href="S3.html" style="     ">S3</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+library
+</td>
+<td style="text-align:left;">
+<a href="S4.html" style="     ">S4</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+library
+</td>
+<td style="text-align:left;">
+<a href="S5.html" style="     ">S5</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+library
+</td>
+<td style="text-align:left;">
+<a href="S7.html" style="     ">S7</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+library
+</td>
+<td style="text-align:left;">
+<a href="S8.html" style="     ">S8</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="other-information" class="section level2">
+<h2>Other information</h2>
+<div id="how-to-install-r-and-rstudio" class="section level3">
+<h3>How to install R and RStudio</h3>
+<p><strong>Process of installation :</strong></p>
+<ul>
+<li>First you <a href="https://cran.r-project.org/">install R</a></li>
+<li>and then you install <a
+href="https://www.rstudio.com/products/rstudio/download/">RStudio</a>.</li>
+</ul>
+<p>Boom.</p>
+</div>
+<div id="resources" class="section level3">
+<h3>Resources</h3>
+<p><strong>Basic tools for data science - learning the
+tidyverse</strong></p>
+<ul>
+<li><a href="https://r4ds.had.co.nz">R for Data Science</a></li>
+</ul>
+<p><strong>For graphics</strong></p>
+<ul>
+<li><a href="https://www.r-graph-gallery.com/"
+class="uri">https://www.r-graph-gallery.com/</a></li>
+</ul>
+<p>R graph gallery is a collection of charts using R, and you can use
+this site to get inspiration on how to plot your data. The site provides
+the code so that you can reproduce the graphs you see with your own
+data.</p>
+<p><strong>Cheatsheets</strong></p>
+<ul>
+<li><a
+href="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf">Data
+Wrangling Cheatsheet with dplyr and tidyr</a></li>
+<li><a
+href="https://posit.co/resources/cheatsheets/?type=posit-cheatsheets&amp;_page=2/">Other
+Cheatsheets</a></li>
+</ul>
+<p>However, I do recommend befriending Google when it comes to questions
+about data analysis. Being able to know what to search for in Google to
+answer your questions will help you a lot, so start with searching for
+stuff like “How do I change the names of the columns of a data set
+<strong>in R</strong>”. Always put the words <strong>in R</strong>
+because if you don’t you’ll get a lot of information about other
+computing languages.</p>
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+---
+title: "Session 5 : Comparing models"
+author: "Moonbin Jo"
+date: ''
+output:
+  html_document:
+    theme: united
+    css: style.css
+    highlight: tango
+mainfont: SourceSansPro
+header-includes:
+- \usepackage[default]{sourcesanspro}
+- \usepackage[T1]{fontenc}
+---
+
+
+```{r setup-TD5, include=FALSE, }
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+# {.tabset .tabset-fade .tabset-pills}
+
+##  Objectives of the session
+
+## Exercises
+
+```{r, include = FALSE}
+library(tidyverse)
+load("data_final.RData")
+load("data_final2.RData")
+```
+
+### Understanding which factors influence the score
+#### Comparing models using the `anova` function
+
+In the earlier session, we compared the mean values of two samples using the model `Score ~ Habit` and also implemented a more complicated model of `Score ~ Habit + Judge` in comparing the values of two samples by using the `lm` function. `Score ~ Habit + Judge` is a more complex model than `Score ~ Habit`, as it has two variables. But do these models show a difference in fit? Does the more complex model show a difference in explanatory power than the simpler one? We can find the answers to these questions by comparing models using the `anova` function.
+
+Once again, the `lm` function is used to fit a linear model with the formula of `Score ~ Habit`. In other words, we are trying to see if the variable `Habit` has a significant influence in the `Score`. These results will be saved as `res1`, and in order to understand the results, the function `anova` will be used to produce an analysis of variance table.
+
+```{r}
+res1 <- lm(Score ~ Habit, data_long_score_t)
+anova(res1)
+```
+
+Through the `anova` function, we have produced a "Analysis of Variance Table".
+What does this analysis of variance table show us?
+
+From these results we can see that the `Habit` variable has a significant effect on the score, as the p-value is smaller than 0.05. 
+
+Now let's look at the second formula of `Score ~ Habit + Judge`. Unlike the first model, this model has two hypotheses. The first null hypothesis is the same as the first model, the variable `Habit` does not have a significant influence on the score. The second one is that the variable `Judge` does not have a significant influence on the score. Therefore, we will have two p-values in the results. Now that we have this in mind, we will execute the function. The same `lm` function is used to fit the linear model. These results will be saved as res2, and we will read the results using the function `anova`.
+
+```{r}
+res2 <- lm(Score ~ Habit + Judge, data_long_score_t)
+anova(res2)
+```
+
+From these results we can see that the variable `Habit` has a significant influence on the score. However,the variable `Judge` does not as the p-value is larger than 0.05. The first null hypothesis is rejected, while the second one is not. Have a good look at the p-value of the `Judge` variable. We'll meet it soon again.
+
+Now in order to see if these models are different, we will use the `anova` function to compare them. Just like the ANOVA tests we saw earlier, this test also has a null hypothesis and an alternative hypothesis. The null hypothesis is that these models are the same, and the alternative hypothesis is that these models are different.
+
+```{r lm 1}
+anova(res1, res2)
+```
+
+Look at the p-value.\
+Have we seen the same p-value? (Yes.) The p-value is the same as the p-value for the variable `Judge` in `res2`.
+
+Because the difference between the two models was the variable `Judge`, if this variable has a significant effect on the score it means that the models are different. Therefore, seeing if the `Judge` variable has a significant effect on the score (when the variable `Habit` is also in the model), is equivalent to investigating if the `Score ~ Habit` model and `Score ~ Habit + Judge` model is same or different.
+
+As the p-value is larger than 0.05, we can say that these models are not different **AND** as we know that the difference between models is the `Judge` variable, we can also say that this variable does not have a significant effect on the score.
+
+[**Now it's your turn!**]{style="color:red"}
+
+Run the next line of the script.
+
+```{r}
+res3 <- lm(Score ~ Habit + situation, data_long_score_t)
+anova(res3)
+```
+
+* What are the two hypotheses this model is trying to answer?
+* Do the variables `Habit` and `situation` have a significant influence on the score?
+
+```{r}
+anova(res1, res3)
+```
+
+* What models are we comparing? (Go back to the start of the session if you need a hint.)
+* By comparing these models, what research question are we trying to answer?
+* The p-value of this comparison is equal to the p-value of what? What does this mean?
+
+## Vocabulary of this session
+
+### R commands
+- library
+
+### R environment
+- packages
+
+### Statistical terms
+- Counting frequencies
+- Calculating the mean value
+
