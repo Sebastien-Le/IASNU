@@ -379,13 +379,14 @@ class="section level3">
 <h3>Is the habit of becoming vegetarian a constraint on people’s
 everyday lives?</h3>
 <p>Let’s look first at the habit of becoming vegetarian. The first
-research question you can formulate from this data is ‘Is the habit of
-becoming vegetarian a constraint on people’s everyday lives?’. If the
-answer to this question is ‘No’, then the score would be 0. We will
-answer this research question by using the t-test, which checks whether
-the true mean of the score is 0 or not.</p>
-<p>On the one hand, we have observed data from which we derive an
-empirical mean that is supposed to reflect a theoretical mean <span
+research question you can formulate from these data is: ‘Is the habit of
+becoming vegetarian a constraint in people’s everyday lives? If the
+answer to this question is ’no’, then the scores given by the
+respondents in the questionnaire should be around 0.</p>
+<p>We will answer this research question by using the t-test, which
+checks whether the <em>true</em> mean of the score is 0 or not. On the
+one hand, we have observed data from which we derive an empirical mean
+that is supposed to reflect a theoretical mean <span
 class="math inline">\(\mu\)</span>. We want to compare this theoretical
 mean, approximated by our empirical mean, with 0. In other words, we
 want to test whether <span class="math inline">\(\mu = 0\)</span> or
@@ -396,9 +397,21 @@ of a sample is significantly different from a known reference value.
 This test is commonly used when you have a single sample of data and you
 want to assess whether the sample’s mean is statistically different from
 a specified value that you consider as a reference or benchmark.</p>
-<p>Before running an analysis, it is important to understand how to
-enter data into a dataset: what are my statistical individuals of
-interest, what are my variables?</p>
+<p>However, prior to conducting any analysis, it’s essential to
+comprehend the process of inputting data into a dataset. This involves
+determining the statistical entities of interest and identifying the
+variables.</p>
+<p>In practical terms, each of the 167 people questioned evaluated 10
+habits: they filled in a form on which they put their identifier, the
+habit evaluated and the score on a scale from 0 to 5. In concrete terms,
+each of the 167 people questioned evaluated ten habits: they filled in a
+form on which they put their identifier, the habit evaluated and the
+score of constraint on a scale from 0 to 5. From this point of view,
+each form can be considered as a statistical individual on which a
+quantitative variable, a score of constraint, and two qualitative
+variables, the habit and the assessor’s identifier, were measured.</p>
+<p>Let’s have a look at the dimension of our data set and at the first 5
+rows.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(data_long_score)</span></code></pre></div>
 <pre><code>## [1] 1670    3</code></pre>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data_long_score[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,]</span></code></pre></div>
@@ -410,11 +423,19 @@ interest, what are my variables?</p>
 ## 3 1     loaner_score             1
 ## 4 1     clothes_second_score     2
 ## 5 1     bulk_score               2</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(data_long_score[data_long_score<span class="sc">$</span>Habit<span class="sc">==</span><span class="st">&quot;vegetarian_score&quot;</span>,]<span class="sc">$</span>Score)</span></code></pre></div>
+<p>We have 1670 statistical individuals measured by 3 variables. Let’s
+limit ourselves to the <em>veggie</em> habit and see if it’s a
+constraint.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data_veggie <span class="ot">&lt;-</span> data_long_score[data_long_score<span class="sc">$</span>Habit<span class="sc">==</span><span class="st">&quot;vegetarian_score&quot;</span>,]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(data_veggie)</span></code></pre></div>
+<pre><code>## [1] 167   3</code></pre>
+<p>We want to see if the 167 scores associated with this habit produce
+an empirical mean that reflects a theoretical mean of 0.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(data_veggie<span class="sc">$</span>Score)</span></code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
-## data:  data_long_score[data_long_score$Habit == &quot;vegetarian_score&quot;, ]$Score
+## data:  data_veggie$Score
 ## t = 30.096, df = 166, p-value &lt; 2.2e-16
 ## alternative hypothesis: true mean is not equal to 0
 ## 95 percent confidence interval:
@@ -422,62 +443,66 @@ interest, what are my variables?</p>
 ## sample estimates:
 ## mean of x 
 ##  3.556886</code></pre>
-<p>There are three main results that we can focus on in the t-test: the
-<code>t</code> value, the <code>p-value</code>, and the
-<code>confidence interval</code>.</p>
-<p>The <code>t</code> value is a ratio of the difference between the
-values we are trying to compare. In this case, it is the mean value of
-constraint score for the habit of becoming vegetarian, and the value of
-0. A higher value of the t-score indicates a larger difference.</p>
-<p>The <code>p-value</code> of the results indicate the probability of
-the null hypothesis being true. In this case, the null hypothesis is
-that the true mean is equal to 0. If the p-value is large (closer to the
-value of 1), it means that the probability of getting the mean that we
-have calculated is very likely, and indicates that the true mean is 0.
-If the p-value is small, it means that the probability of getting the
-mean that we have calculated is very unlikely, and also indicates that
-the true mean is not equal to 0. Generally, a p-value smaller than 0.05
-is seen as significant evidence to reject the null hypothesis.</p>
-<p>In this case, the p-value of the results indicates the probability of
-getting the mean value of the score that has been calculated (3.556886)
-when the true mean is actually 0. As this value is very
-<strong>very</strong> small, we can reject the null hypothesis that the
-true mean is equal to 0.</p>
-<p>The <code>confidence interval</code> shows the range the true mean
-belongs to based on the mean value that is calculated, with 95 percent
-confidence. Based on the mean value that is calculated, we have 95
-percent confidence that the true mean of the score will be in this
-range.</p>
+<p>The only input we have provided to the <code>t.test()</code> function
+is the vector of 167 scores. What can we deduce from the output of this
+function? Firstly, that the function has tested the equality of our
+theoretical mean to 0 against the alternative that the true mean is not
+equal to 0. This means that the default value for the reference value is
+0. Then that our true mean is not equal to 0, given the confidence
+interval around the true mean: 0 does not belong to this interval. By
+construction, the empirical mean of the 167 values (3.55) is right in
+the middle of our confidence interval around <span
+class="math inline">\(\mu\)</span>.</p>
+<p>With no further details, let’s generate 167 values from a centred
+reduced normal distibution and calculate the means of these values.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">rnorm</span>(<span class="dv">167</span>))</span></code></pre></div>
+<pre><code>## [1] -0.03360626</code></pre>
+<p>We could do this several times and generate a distribution of
+averages calculated from 167 values from a centred reduced normal
+distribution. The <em>p-value</em> is the probability of observing the
+empirical mean that has actually been observed within this distribution
+of averages. In other words, if the theoretical mean is equal to 0, the
+probability of observing the mean that was actually observed is zero
+(&lt; 2.2e-16).</p>
+<p>To understand the very important concept of standard deviation, we
+can refer to the concept of proxemics which is the study of how people
+perceive and use space in various social and cultural contexts. It deals
+with the ways in which individuals structure and interact with their
+physical environment, as well as the distances they maintain between
+themselves and others during communication and social interactions.</p>
+<p>Edward T. Hall, an anthropologist, introduced the concept of
+proxemics in the mid-20th century. He categorized the space around
+individuals into different zones, such as intimate distance, personal
+distance, social distance, and public distance. These zones have
+cultural and contextual variations, and they influence how people
+interact, communicate, and feel comfortable in different situations.</p>
+<p>In statistics we often say that 95% of the population is within 2
+standard deviations. With our observations, we are a good 30 standard
+deviations of our reference value (<em>t=30.096</em>), which is 0. In
+other words, culturally speaking, we are infinitely far from it, to use
+the terms of proxemics.</p>
 <p>In conclusion, the score of constraint for becoming vegetarian is not
 equal to 0, and we can say that this habit is perceived as being
 constraining for the participants.</p>
 </div>
 <div id="is-it-very-constraining" class="section level3">
 <h3>Is it very constraining?</h3>
-<p>Another research question we can think of is if the mean value of the
-score</p>
-<p>For example, from a scale of 0-5, if we say that if the mean value of
-the habit is larger than 3, it means that the habit is perceived as
-“very constraining”. Therefore, we can use this value to evaluate the
-constraint of the habit of becoming vegetarian. By investigating whether
-the mean value of the score is larger than 3 or not, we can assess the
-constraint of the habit.</p>
-<p>We can use the <code>t.test</code> function to calculate whether the
-mean score is greater than 3.</p>
+<p>To answer this question, we won’t test for equality at 0, but for
+superiority at another reference value, let’s say 3 for the sake of
+clarity. To do so, let’s add two arguments to our call to the
+<code>t-test()</code> function:</p>
 <ul>
-<li>We will add two arguments compared to the earlier t-test that
-compared the mean to 0. First, by adding the argument
-<code>mu = 3</code>, we can compare the mean value of the score to the
-value of 3. Second, by adding the argument
-<code>alternative = c("greater")</code>, we can conduct a t-test on
-whether the mean is greater than 3.</li>
+<li>First, by setting the argument <code>mu = 3</code>, we can compare
+the mean value of the score to the value of 3.</li>
+<li>Second, by setting the argument
+<code>alternative = "greater"</code>, we can conduct a t-test on whether
+the mean is greater than 3.</li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(data_long_score[data_long_score<span class="sc">$</span>Habit <span class="sc">==</span> <span class="st">&quot;vegetarian_score&quot;</span>,]<span class="sc">$</span>Score,</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mu =</span> <span class="dv">3</span>, <span class="at">alternative =</span> <span class="fu">c</span>(<span class="st">&quot;greater&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(data_veggie<span class="sc">$</span>Score, <span class="at">mu =</span> <span class="dv">3</span>, <span class="at">alternative =</span> <span class="st">&quot;greater&quot;</span>)</span></code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
-## data:  data_long_score[data_long_score$Habit == &quot;vegetarian_score&quot;, ]$Score
+## data:  data_veggie$Score
 ## t = 4.712, df = 166, p-value = 2.581e-06
 ## alternative hypothesis: true mean is greater than 3
 ## 95 percent confidence interval:
@@ -491,30 +516,24 @@ hypothesis was that the true mean of the score was equal to 0, while the
 alternative hypothesis was that the true mean of the score was not equal
 to 0. However, the alternative hypothesis does not specify whether the
 true mean of the score is bigger or smaller than 0.</p>
-<p>For this t-test, the null hypothesis is that the true mean is either
-equal or smaller than the value that we have chosen, and the alternative
-hypothesis is that the true mean is larger than 3. You can see these
-differences in the <code>alternative hypothesis</code> in the results of
-the t-tests.</p>
-<p>Therefore, the results of the t-test have different meanings. The
-p-value is much smaller than 0.05, meaning that we can reject the null
-hypothesis, and accept the alternative hypothesis. This indicates that
-the true mean value is greater than 3.</p>
+<p>For this t-test, the null hypothesis is that the true mean is equal
+to the value that we have chosen, and the alternative hypothesis is that
+the true mean is greater than 3.</p>
+<p>Several elements of the output indicate that the true mean is greater
+than 3, our reference value. The confidence interval around the true
+mean does not contain the reference value, but it does contain numbers
+greater than our reference value. The <em>p-value</em> is much smaller
+than 0.05, meaning that we can reject the null hypothesis, and accept
+the alternative hypothesis.</p>
 <p>In conclusion, we can evaluate the habit of becoming vegetarian is
 perceived as very constraining.</p>
-<p><span style="color:red"><strong>Now it’s your
-turn!</strong></span></p>
-<p>Run the next line of the script</p>
-<p><strong><code>t.test(data_long_score[data_long_score$Habit=="air_drying_score",]$Score)</code></strong></p>
-<ul>
-<li>What is the research question this t-test trying to answer?</li>
-<li>What does the p-value of the t-test indicate?</li>
-<li>What range is the true mean of the score for “air_drying_score”
-belong in, and what does it mean? Is it smaller than the value of
-3?</li>
-<li>Is air-drying more constraining than becoming vegetarian? Is it
-possible to know this with the t-test results?</li>
-</ul>
+</div>
+<div id="now-its-your-turn" class="section level3">
+<h3>Now it’s your turn!</h3>
+<p>Let’s do the same thing with the variable
+<em>air_drying_score</em>.</p>
+<p>Is air-drying more constraining than becoming vegetarian? We’ll
+answer that question in the next session.</p>
 </div>
 </div>
 <div id="vocabulary-of-this-session" class="section level2">
