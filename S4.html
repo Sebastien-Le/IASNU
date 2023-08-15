@@ -418,8 +418,21 @@ significance of the difference between the two means.</p>
 vector of the differences between the variables
 <em>data_paired$never_airplane_score</em> and
 <em>data_paired$unplug_score</em>, and let’s run the
-<code>t.test()</code> function on this vector using the default options.
-As you can see, the two analyses provide the same results.</p>
+<code>t.test()</code> function on this vector using the default
+options.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(data_paired<span class="sc">$</span>never_airplane_score <span class="sc">-</span> data_paired<span class="sc">$</span>unplug_score)</span></code></pre></div>
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  data_paired$never_airplane_score - data_paired$unplug_score
+## t = 5.8044, df = 166, p-value = 3.199e-08
+## alternative hypothesis: true mean is not equal to 0
+## 95 percent confidence interval:
+##  0.6796052 1.3802751
+## sample estimates:
+## mean of x 
+##   1.02994</code></pre>
+<p>As you can see, the two analyses provide the same results.</p>
 </div>
 <div id="from-the-paired-sample-t-test-to-the-notion-of-model"
 class="section level3">
@@ -438,8 +451,8 @@ confusion or misunderstanding. Actually, this function computes analysis
 of variance (or deviance) tables for one or more fitted model objects.
 In our case, the fitted model object is the result of the
 <code>lm()</code> function.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>res.lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(Score <span class="sc">~</span> Habit <span class="sc">+</span> Judge, data_plane_unplug)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(res.lm)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>res.lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(Score <span class="sc">~</span> Habit <span class="sc">+</span> Judge, data_plane_unplug)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(res.lm)</span></code></pre></div>
 <pre><code>## Analysis of Variance Table
 ## 
 ## Response: Score
@@ -454,7 +467,7 @@ essential. Remember, in the previous session, when we compared two
 variances by calculating their ratio? It’s the same idea, here: we
 compare sum of squares divided by their degrees of freedom. The F value
 is the ratio of the sum of squares divided by their degrees of freedom.
-For the <em>Habit</em> variable, 3.691 = 88.575/2.629.</p>
+For the <em>Habit</em> variable, 33.691 = 88.575/2.629.</p>
 </div>
 </div>
 <div id="vocabulary-of-this-session" class="section level2">
