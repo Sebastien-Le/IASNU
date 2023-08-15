@@ -9,10 +9,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Moonbin Jo" />
 
 
-<title>Session 3 : Comparing two scores using t-test</title>
+<title>Session 3 : Comparing the scores of two habits using the t-test</title>
 
 <script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -360,9 +359,8 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Session 3 : Comparing two scores using
-t-test</h1>
-<h4 class="author">Moonbin Jo</h4>
+<h1 class="title toc-ignore">Session 3 : Comparing the scores of two
+habits using the t-test</h1>
 
 </div>
 
@@ -375,46 +373,56 @@ class="section level1 tabset tabset-fade tabset-pills">
 </div>
 <div id="exercises" class="section level2">
 <h2>Exercises</h2>
-<div id="t-test" class="section level3">
-<h3>t-test</h3>
-<div id="t-test-between-two-samples" class="section level4">
-<h4>t-test between two samples</h4>
-<p>In the earlier session, we looked at several t-tests that compared
-the mean value of a score to another score. This t-test was conducted in
-order to evaluate how constraining the habit was perceived for
-participants. However, this t-test was able to evaluate the mean value
-of score for one habit.</p>
-<p>What happens when we want to compare the constraint of two habits?
-Another type of research question we can formulate from this data is
-whether one habit is more constraining than the other. In other words,
-we are trying to find out if the type of habit has an effect on the
-score of constraint. This sort of statistical thinking is called
-modeling. By modeling, we are trying to find out <strong>what factors
-influence the output</strong>, and in this situation, we are trying to
-find out if the factor ‘type of habit’ significantly influences the
-‘score of constraint’.</p>
-<p>This research question can be answered with a t-test that compares
-the mean values of two habits. If the type of habit has an effect on the
-score, than the mean scores would be significantly different. On the
-other hand, if the type of habit doesn’t have an effect on the score,
-the mean scores would be the same.</p>
+<p>Remember that in the previous session we made our decision on the
+basis of a confidence interval, a distribution of averages, a number of
+steps relative to a reference situation: we can’t make a decision on the
+basis of a single value such as the average. Individual data are
+essential because we need to incorporate the notion of variability into
+our decision making.</p>
+<p>In this session, for technical reasons that we will explain later, we
+will first look at how to compare two variances with each other, and
+then we will see how the results of this variance comparison can be used
+to compare two means with each other.</p>
 <p>We will look at the habits of never flying on an airplane, and
-unplugging one’s electrical devices when you are not using it. First, we
-will have to modify the data by filtering out the habits that we are
-trying to compare.</p>
+unplugging one’s electrical devices when you are not using it.</p>
+<div id="comparing-two-variances" class="section level3">
+<h3>Comparing two variances</h3>
 <p>In order to filter out the data for scores for never flying an
 airplane, and unplugging one’s electrical devices, we will use the
-<code>filter</code> function to filter out the habits that we are trying
-to compare and saving it to another data frame
-<code>data_long_score_t</code>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data_long_score_t <span class="ot">&lt;-</span> data_long_score <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Habit <span class="sc">==</span> <span class="st">&quot;never_airplane_score&quot;</span><span class="sc">|</span></span>
+<code>filter()</code> function to filter out the habits that we are
+trying to compare and saving it to another data frame.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data_plane_unplug <span class="ot">&lt;-</span> data_long_score <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Habit <span class="sc">==</span> <span class="st">&quot;never_airplane_score&quot;</span><span class="sc">|</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                                                Habit <span class="sc">==</span> <span class="st">&quot;unplug_score&quot;</span>)</span></code></pre></div>
-<p>Before conducting a t-test between the mean values of the scores, a
-F-test must be performed in order to compare the variances of the two
-samples. This F-test is conducted to assess the group differences of
-populations. These results will be used in the later t-test. The F-test
-can be conducted using the <code>var.test</code> function.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var.test</span>(Score <span class="sc">~</span> Habit, data_long_score_t)</span></code></pre></div>
+<p>Two values can be compared either by calculating their difference or
+by calculating their ratio. Comparing two variances is done by
+calculating the ratio of these two variances. Since the variance is a
+sum of squares, the ratio of two variances follows a certain
+distribution when the variances are equal.</p>
+<p>For this comparison, we’ll use the same proof by contradiction that
+we used in the previous session. A proof of contradiction is a logical
+reasoning in which a proposition is proven true by assuming its opposite
+(contradiction) and then showing that this assumption leads to an absurd
+or contradictory result. This method helps establish the truth of the
+original proposition by showing that its negation cannot hold without
+leading to logical inconsistencies.</p>
+<p>In our case, we’ll calculate the ratio of two variances and then
+check whether this ratio falls within the expected distribution when the
+variances are equal: that is the idea behind the very important F-test.
+Let’s compare our variances with the <code>var.test()</code>
+function.</p>
+<p>Our dataset <em>data_plane_unplug</em> comprises three variables: one
+quantitative variable representing different scores, and two qualitative
+variables—one for identifying the habit and another for identifying the
+assessor. Comparing the variances associated with the two habits raises
+the question of whether the variance depends on the habits or not.</p>
+<p>Thus, when using the <code>var.test()</code> function for comparing
+variances in R, you need to provide two arguments: the formula that
+expresses the relationship or dependency and the name of the
+dataset.</p>
+<p>In the R programming language, the tilde character (~) is used to
+represent dependency or relationships between variables, especially in
+the context of modeling or formula specifications.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var.test</span>(Score <span class="sc">~</span> Habit, data_plane_unplug)</span></code></pre></div>
 <pre><code>## 
 ##  F test to compare two variances
 ## 
@@ -426,22 +434,28 @@ can be conducted using the <code>var.test</code> function.</p>
 ## sample estimates:
 ## ratio of variances 
 ##           1.266883</code></pre>
-<p>Though the F-test produces the same p-value, it means a different
-thing than the p-value of the t-test. For this F-test, the null
-hypothesis is that the true ratio of variance is equal to 1 (hence, the
-ratio of the two groups is equal). The p-value shows the probability of
-the variance for the two groups being equal. As this value is smaller
-than 0.05, we can accept that the variance of the two groups as being
-equal. We can also see that the <code>confidence interval</code>
-includes the value of 1. Therefore, the variances of the two scores are
-the same.</p>
-<ul>
-<li>Now that we’ve confirmed that the variances are equal, we can add
-that argument into the t.test function as
-<code>var.equal = TRUE</code>.</li>
-</ul>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(Score <span class="sc">~</span> Habit, data_long_score_t,</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">var.equal =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>The output indicates that the default test compares the equality of
+variances to the scenario where variances are unequal, given that the
+ratio of variances differs from 1, our reference value. The confidence
+interval of the ratio of true variances contains our reference value 1.
+This suggests that, within the calculated confidence interval, there is
+no significant evidence to conclude that the variances are different
+from each other.</p>
+<p>Using the proof of contradiction, the ratio we have observed based on
+our data falls within the expected distribution of the ratio of two
+variances when they are equal (p-value = 0.1285): this suggests that
+there is no substantial evidence to refute the assumption of equal
+variances based on the observed data.</p>
+</div>
+<div id="comparing-two-means" class="section level3">
+<h3>Comparing two means</h3>
+<p>Similarly to the comparison of two variances, comparing the means
+associated with the two habits raises the question of whether the means
+depends on the habits or not. Therefore, we use the same syntax to
+compare two means as we do to compare two variances, but with the
+<code>t.test()</code> function, specifying that the comparison is made
+on the assumption that the variances are equal.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(Score <span class="sc">~</span> Habit, <span class="at">var.equal =</span> <span class="cn">TRUE</span>, data_plane_unplug)</span></code></pre></div>
 <pre><code>## 
 ##  Two Sample t-test
 ## 
@@ -453,27 +467,28 @@ that argument into the t.test function as
 ## sample estimates:
 ## mean in group never_airplane_score         mean in group unplug_score 
 ##                           2.676647                           1.646707</code></pre>
-<p>This time, the t-test is trying to calculate if the difference in
-means is equal to 0 or not. If the difference was equal to 0, it would
-mean that the true means of scores were equal. If the difference was not
-equal to 0, it would mean that the true means of scores were different.
-This is why the alternative hypothesis seen in the results is
-<code>true difference in means between group never_airplane_score and group unplug_score is not equal to 0</code>.
-This also means that the null hypothesis is that the true difference in
-means between group is equal to 0.</p>
-<p>Looking at the t-test results, we can see that the the p-value is
-smaller than 0.05, meaning that the null hypothesis can be rejected.
-Also looking at the <code>confidence interval</code>, the range is
-larger than 0, Meaning that the mean difference is going to be larger
-than 0.</p>
-<p>Therefore, the perception of constraint of never taking an airplane,
-and unplugging one’s electric device is not equal.</p>
-<p>Now that we know that the score is different, we can see which one is
-more difficult. Looking at the mean values of each habit, we can see
-that never riding an airplane has a higher score. In conclusion, we can
-say that never riding an airplane is considered significantly more
-constraining than unplugging your electrical devices.</p>
-</div>
+<p>As mentionned previously, two values can be compared either by
+calculating their difference or by calculating their ratio. Comparing
+two means is done by calculating their difference and comparing this
+difference to a reference value which is 0. This time, the confidence
+interval calculated is that around the difference between the true
+means. To obtain this interval, we need to estimate this difference and,
+as before, estimate the variance of the difference between the means. To
+estimate this variance, it is necessary to test for equality of
+variances, as was done previously.</p>
+<p>Several elements of the output indicate that the difference between
+the true means is different from 0. The confidence interval around the
+true mean does not contain the reference value. The p-value is much
+smaller than 0.05, meaning that we can reject the null hypothesis, and
+accept the alternative hypothesis. All of this is, of course, consistent
+with the fact that what has been observed is far from the reference
+situation, the true means are equal, in terms of the number of standard
+deviations (t = 6.12).</p>
+<p>Therefore, the perceptions of constraint of never taking an airplane,
+and unplugging one’s electric device are not equal. Looking at the mean
+values of each habit, we can assume that never riding an airplane is
+considered more constraining than unplugging your electrical
+devices.</p>
 </div>
 </div>
 <div id="vocabulary-of-this-session" class="section level2">
