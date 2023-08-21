@@ -11,7 +11,7 @@
 
 
 
-<title>Session 2 : Understanding the scores of one habit using the t-test</title>
+<title>Session 2: Understanding the scores of one habit using the t-test</title>
 
 <script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -359,7 +359,7 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Session 2 : Understanding the scores of one
+<h1 class="title toc-ignore">Session 2: Understanding the scores of one
 habit using the t-test</h1>
 
 </div>
@@ -370,6 +370,12 @@ class="section level1 tabset tabset-fade tabset-pills">
 <h1 class="tabset tabset-fade tabset-pills"></h1>
 <div id="objectives-of-this-session" class="section level2">
 <h2>Objectives of this session</h2>
+<p>This session is very important to understand the notion of variance,
+the notion of estimator and of course the concept of variance of an
+estimator. In other words, no decision can be taken without any idea of
+the variability of the data. In this session, we try to break down the
+different components of an R output, and we try to present them in an
+intuitive way, without being too formal.</p>
 </div>
 <div id="exercises" class="section level2">
 <h2>Exercises</h2>
@@ -456,7 +462,7 @@ class="math inline">\(\mu\)</span>.</p>
 <p>With no further details, let’s generate 167 values from a centred
 reduced normal distibution and calculate the means of these values.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">rnorm</span>(<span class="dv">167</span>))</span></code></pre></div>
-<pre><code>## [1] -0.1544931</code></pre>
+<pre><code>## [1] -0.03851925</code></pre>
 <p>We could do this several times and generate a distribution of
 averages calculated from 167 values from a centred reduced normal
 distribution. The <em>p-value</em> is the probability of observing the
